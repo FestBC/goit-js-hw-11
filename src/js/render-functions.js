@@ -4,6 +4,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const gallery = document.querySelector(".gallery");
 const loader = document.querySelector(".loader");
+const galleryBox = new SimpleLightbox(".gallery a");
 
 export function createGallery(images) {
     const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
@@ -43,7 +44,7 @@ export function createGallery(images) {
 
     gallery.insertAdjacentHTML("beforeend", markup);
 
-    new SimpleLightbox(".gallery a").refresh();
+    galleryBox.refresh();
 }
 
 export function clearGallery() {
