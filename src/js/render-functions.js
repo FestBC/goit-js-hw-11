@@ -51,9 +51,9 @@ export function clearGallery() {
 }
 
 export function showLoader() {
-    loader.classList.toggle("loader");
+    loader.classList.remove("visually-hidden");
 }
 
 export function hideLoader() {
-    loader.classList.toggle("loader");
+    loader.classList.add("visually-hidden");
 }

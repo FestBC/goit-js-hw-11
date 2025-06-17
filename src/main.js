@@ -1,15 +1,42 @@
 import getImagesByQuery from "./js/pixabay-api";
-import { clearGallery, showLoader, hideLoader } from "./js/render-functions";
+import { createGallery, clearGallery, showLoader, hideLoader } from "./js/render-functions";
 
+import iziToast from "izitoast";
+import 'izitoast/dist/css/iziToast.min.css';
 
 const form = document.querySelector(".form");
-hideLoader(); // Из-за автопроверки пришлось добавить и изменить код немного.
 
-form.addEventListener("submit", async event => {
+form.addEventListener("submit", event => {
     event.preventDefault();
+    const query = form.elements["search-text"].value.trim();
+
+    if (!query) {
+        iziToast.error({
+            message: "Please, enter a valid search query.",
+            position: "topRight"
+        });
+        return;
+    }
 
     clearGallery();
     showLoader();
-    await getImagesByQuery(form.elements["search-text"].value);
-    hideLoader();
+
+    getImagesByQuery(query)
+        .then(images => {
+            if (!images.length) {
+                iziToast.error({
+                    message: "There are no images with this query. Enter an another query.",
+                    position: "topRight"
+                });
+                return;
+            }
+            createGallery(images);
+        })
+        .catch(error => {
+            iziToast.error({
+                message: "Oops... Something went wrong. Please, try again later.",
+                position: "topRight"
+            });
+        })
+        .finally(() => { hideLoader(); });
 });

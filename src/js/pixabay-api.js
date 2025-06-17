@@ -1,11 +1,5 @@
 import axios from "axios";
 
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
-
-import { createGallery } from "./render-functions";
-
-
 export default function getImagesByQuery(query) {
     return axios.get("https://pixabay.com/api/", {
         params: {
@@ -16,15 +10,5 @@ export default function getImagesByQuery(query) {
             safesearch: true
         }
     })
-    .then(response => {
-        if (!response.data.total) {
-            iziToast.error({
-                message: "Sorry, there are no images matching your search query. Please try again!",
-                position: "topRight"
-            });
-        }
-
-        createGallery(response.data.hits);
-    })
-    .catch(error => { console.log(error); });
+    .then(response => response.data.hits);
 }
